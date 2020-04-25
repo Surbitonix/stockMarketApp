@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load multiply %}
+{% load humanize %}
+
+
+{% block content %}
+</br>
+{% if ticker %}
+<h1>{{ticker}}</h1>
+{% endif %}
+
+{% if api %}
+	{% if api == "Request failed"%}
+		{{errorMessage}}
+	{% else %}
+		<h1> {{api.companyName}} Quote</h1></br>
+		Symbol {{api.symbol}}</br>
+		Trading Venue {{api.primaryExchange}}</br>
+		Price ${{api.latestPrice}}</br>
+		Previous Close ${{api.previousClose}}</br>
+		Highest price(YTD) ${{api.week52High}}</br>
+		Lowest Price(YTD) ${{api.week52Low}}</br>
+		Previous Volume {{api.previousVolume | intcomma}}</br>
+		change {{api.changePercent | multiply:100 | floatformat:3}}%</br>
+		marketCap ${{api.marketCap | intcomma}}</br>
+		Year to Date Change {{api.ytdChange | multiply:100 | floatformat:3}}%</br>
+		Request Time (EST)  {{api.latestTime}}</br>
+		
+		<!--jst in case u can need to parse the entire message
+		<br></br>
+		{% for x, y in api.items %}
+			{{x}}: {{y}}</br>
+		{%endfor%}-->
+		
+
+		
+	{% endif %}
+{% endif %}
+
+{% endblock %}

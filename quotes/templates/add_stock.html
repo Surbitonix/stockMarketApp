@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load multiply %}
+{% load humanize %}
+
+
+{% block content %}
+<h1>Equities portfolio</h1>
+
+
+<form action="{%url 'add_stock'%}"class="form-inline my-2 my-lg-0" method="POST">
+    	{%csrf_token%}
+      <input class="form-control mr-sm-2" type="search" placeholder="Add to Portfolio" aria-label="Search" name="ticker">
+      <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">Add Stock</button>
+    </form>
+
+<br/>
+
+<table class="table table-bordered table-hover">
+  <thead class="table thead-dark">
+    <tr>
+      <th scope="col">CompanyName</th>
+      <th scope="col">Ticker</th>
+      <th scope="col">Trading Venue</th>
+      <th scope="col">Price</th>
+      <th scope="col">Previous Close</th>
+      <th scope="col">Highest Price (YTD)</th>
+      <th scope="col">Lowest Price (YTD)</th>
+      <th scope="col">Traded Volume Change</th>
+      <th scope="col">YTD Change</th>
+      <th scope="col">Market Cap</th>
+      <th scope="col">Request Date</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+{% if ticker %}
+  	
+  	<tr>
+  		{% for i in ticker_list%}
+		<th scope="row">{{i.companyName}}</th>
+		<td>{{i.symbol|upper}}</td>
+		<td>{{i.primaryExchange}}</td>
+		<td>${{i.latestPrice}}</td>
+	    <td>${{i.previousClose}}</td>
+	    <td>${{i.week52High}}</td>
+	    <td>${{i.week52Low}}</td>
+	    <td>{{i.changePercent|multiply:100|floatformat:3}}%</td>
+	    <td>{{i.ytdChange|multiply:100|floatformat:3}}%</td>
+	    <td>${{i.marketCap |intcomma}}</td>
+	    <td>{{i.latestTime}}</td>	    
+      	
+    </tr>
+    {% endfor %}
+{%endif%}
+    
+    </tbody>
+ </table>
+
+
+{% endblock %}
